@@ -15,7 +15,7 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
-  const { register, loading } = useAuth();
+  const { signUp, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -60,8 +60,8 @@ const Register: React.FC = () => {
       return;
     }
     
-    const success = await register(formData.email, formData.password, formData.name, formData.userType);
-    if (success) {
+    const { error: signUpError } = await signUp(formData.email, formData.password, formData.name);
+    if (!signUpError) {
       toast.success('¡Cuenta creada exitosamente! Por favor verifica tu email.');
       navigate('/login');
     } else {

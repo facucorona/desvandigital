@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { User } from '../../shared/types';
+import { User } from '../types.js';
 
 // Extend Request interface to include user
 declare global {
@@ -51,12 +51,14 @@ export const authenticateToken = async (
     req.user = {
       id: decoded.userId,
       email: decoded.email,
+      name: '',
       role: decoded.role as 'user' | 'admin',
+      isActive: true,
+      createdAt: '',
+      updatedAt: '',
       username: '', // Will be populated from database if needed
       full_name: '', // Will be populated from database if needed
-      subscription_type: 'free', // Will be populated from database if needed
-      created_at: '',
-      updated_at: ''
+      subscription_type: 'free' // Will be populated from database if needed
     };
 
     next();
@@ -142,7 +144,7 @@ export const requirePremium = async (
 };
 
 // Generic role requirement middleware
-export const requireRole = (role: 'user' | 'admin') => {
+export const requireRole = (roles: ('user' | 'admin')[] | 'user' | 'admin') => {
   return async (
     req: Request,
     res: Response,
@@ -157,10 +159,11 @@ export const requireRole = (role: 'user' | 'admin') => {
         return;
       }
 
-      if (req.user.role !== role) {
+      const allowedRoles = Array.isArray(roles) ? roles : [roles];
+      if (!allowedRoles.includes(req.user.role)) {
         res.status(403).json({
           success: false,
-          message: `${role} access required`
+          message: `Required role: ${allowedRoles.join(' or ')}`
         });
         return;
       }
@@ -202,12 +205,14 @@ export const optionalAuth = async (
     req.user = {
       id: decoded.userId,
       email: decoded.email,
+      name: '',
       role: decoded.role as 'user' | 'admin',
+      isActive: true,
+      createdAt: '',
+      updatedAt: '',
       username: '',
       full_name: '',
-      subscription_type: 'free',
-      created_at: '',
-      updated_at: ''
+      subscription_type: 'free'
     };
 
     next();
@@ -219,8 +224,8 @@ export const optionalAuth = async (
 
 // Generate JWT token
 export const generateToken = (user: { id: string; email: string; role: string }): string => {
-  const jwtSecret = process.env.JWT_SECRET;
-  if (!jwtSecret) {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
     throw new Error('JWT_SECRET not configured');
   }
 
@@ -230,9 +235,9 @@ export const generateToken = (user: { id: string; email: string; role: string })
       email: user.email,
       role: user.role
     },
-    jwtSecret,
+    secret,
     {
-      expiresIn: process.env.JWT_EXPIRES_IN || '24h'
+      expiresIn: '24h'
     }
   );
 };
@@ -251,7 +256,7 @@ export const generateRefreshToken = (user: { id: string; email: string }): strin
     },
     refreshSecret,
     {
-      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
+      expiresIn: '7d'
     }
   );
 };

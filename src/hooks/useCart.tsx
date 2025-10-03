@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Product } from '../../shared/types';
+import type { Product } from '@shared/types';
 import { toast } from 'sonner';
 
 interface CartItem {

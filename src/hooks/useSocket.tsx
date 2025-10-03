@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '../contexts/AuthContext';
-import { Message, Chat } from '../../shared/types';
+import type { Message, Chat } from '@shared/types';
 
 interface SocketContextType {
   socket: Socket | null;
@@ -27,14 +27,14 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [typingUsers, setTypingUsers] = useState<Record<string, string[]>>({});
-  const { user, session } = useAuth();
+  const { user, token } = useAuth();
 
   useEffect(() => {
-    if (user && session) {
+    if (user && token) {
       // Initialize socket connection
-      const newSocket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001', {
+      const newSocket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:3001', {
         auth: {
-          token: session.access_token,
+          token,
           userId: user.id
         },
         transports: ['websocket', 'polling']
@@ -105,7 +105,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setTypingUsers({});
       };
     }
-  }, [user, session]);
+  }, [user, token]);
 
   const joinRoom = (roomId: string) => {
     if (socket) {

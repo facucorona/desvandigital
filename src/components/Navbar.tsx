@@ -23,13 +23,13 @@ import {
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, signOut } = useAuth();
   const { totalItems } = useCart();
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    signOut();
     setShowUserMenu(false);
     navigate('/');
   };

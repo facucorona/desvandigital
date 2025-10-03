@@ -16,25 +16,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Import routes
-import authRoutes from './routes/auth';
-import userRoutes from './routes/users';
-import postRoutes from './routes/posts';
-import messageRoutes from './routes/messages';
-import studyRouteRoutes from './routes/studyRoutes';
-import productRoutes from './routes/products';
-import orderRoutes from './routes/orders';
-import dashboardRoutes from './routes/dashboard';
-import atticObjectRoutes from './routes/atticObjects';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/users.js';
+import postRoutes from './routes/posts.js';
+import messageRoutes from './routes/messages.js';
+import studyRouteRoutes from './routes/studyRoutes.js';
+import productRoutes from './routes/products.js';
+import orderRoutes from './routes/orders.js';
+import dashboardRoutes from './routes/dashboard.js';
+import atticObjectRoutes from './routes/atticObjects.js';
 
 // Import middleware
-import { errorHandler } from './middleware/errorHandler';
-import { authenticateToken } from './middleware/auth';
+import { errorHandler } from './middleware/errorHandler.js';
+import { authenticateToken } from './middleware/auth.js';
 
 // Import socket handlers
-import { setupSocketHandlers } from './socket/handlers';
+import { setupSocketHandlers } from './socket/handlers.js';
 
 // Load environment variables
-dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config();
 
 const app = express();
 const server = createServer(app);

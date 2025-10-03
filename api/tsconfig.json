@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "ES2020",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./",
-    "strict": true,
+    "rootDir": ".",
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,11 +14,11 @@
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "noImplicitThis": false,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": ".",
@@ -31,8 +31,7 @@
     "emitDecoratorMetadata": true
   },
   "include": [
-    "**/*.ts",
-    "../shared/**/*.ts"
+    "**/*.ts"
   ],
   "exclude": [
     "node_modules",

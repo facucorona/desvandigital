@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Plus, Image, Video, FileText, Users, TrendingUp } from 'lucide-react';
-import { supabase } from '../supabase/config';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
 

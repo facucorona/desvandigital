@@ -1,22 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { body, validationResult } from 'express-validator';
-import { query } from '../config/database';
-import {
-  generateToken,
-  generateRefreshToken,
-  verifyRefreshToken,
-  authenticateToken
-} from '../middleware/auth';
-import {
-  asyncHandler,
-  successResponse,
-  ValidationError,
-  ConflictError,
-  AuthenticationError,
-  NotFoundError
-} from '../middleware/errorHandler';
-import { User, AuthResponse } from '../../shared/types';
+import { query } from '../config/database.js';
+import { generateToken, generateRefreshToken, verifyRefreshToken, authenticateToken } from '../middleware/auth.js';
+import { asyncHandler, successResponse, CustomValidationError, ConflictError, AuthenticationError, NotFoundError } from '../middleware/errorHandler.js';
+import { User, AuthResponse } from '../types.js';
 
 const router = express.Router();
 
@@ -56,7 +44,7 @@ const loginValidation = [
 router.post('/register', registerValidation, asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new ValidationError('Validation failed');
+    throw new CustomValidationError('Validation failed');
   }
 
   const { username, email, password, full_name } = req.body;
@@ -110,7 +98,7 @@ router.post('/register', registerValidation, asyncHandler(async (req, res) => {
 router.post('/login', loginValidation, asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new ValidationError('Validation failed');
+    throw new CustomValidationError('Validation failed');
   }
 
   const { email, password } = req.body;
@@ -257,7 +245,7 @@ router.put('/change-password', [
 ], asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new ValidationError('Validation failed');
+    throw new CustomValidationError('Validation failed');
   }
 
   const { currentPassword, newPassword } = req.body;

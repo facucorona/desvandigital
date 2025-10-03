@@ -108,7 +108,7 @@ export interface Address {
   country: string;
 }
 
-// Study Routes types
+// Study Route types
 export interface StudyRoute {
   id: string;
   title: string;
@@ -149,7 +149,7 @@ export interface LessonResource {
   size?: number;
 }
 
-// Social Network types
+// Post types
 export interface Post {
   id: string;
   authorId: string;
@@ -193,7 +193,7 @@ export interface Reply {
   createdAt: string;
 }
 
-// Messaging types
+// Message types
 export interface Message {
   id: string;
   senderId: string;
@@ -261,7 +261,7 @@ export interface ActivityItem {
   details?: string;
 }
 
-// 3D Attic types
+// Attic Object types
 export interface AtticObject {
   id: string;
   name: string;
@@ -288,7 +288,7 @@ export interface ObjectLink {
   createdAt: string;
 }
 
-// Design Account types
+// Design types
 export interface DesignProject {
   id: string;
   name: string;
@@ -325,7 +325,7 @@ export interface CanvasLayer {
   children?: CanvasLayer[];
 }
 
-// API Response types
+// API types
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;

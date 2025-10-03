@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as fabric from 'fabric';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../supabase/config';
+import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import {
   Square,

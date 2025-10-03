@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Clock, Users, Star, Play, Lock, CheckCircle, Filter, Search, Grid, List, Calendar, Award } from 'lucide-react';
-import { supabase } from '../supabase/config';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
 

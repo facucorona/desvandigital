@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Text, Box, Sphere, Cylinder } from '@react-three/drei';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../supabase/config';
+import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import {
   Save,

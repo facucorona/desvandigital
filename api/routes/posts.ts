@@ -1,10 +1,10 @@
 import express from 'express';
 import { body, param, query } from 'express-validator';
 import multer from 'multer';
-import { authenticateToken, requireRole, optionalAuth } from '../middleware/auth';
-import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler';
-import { query as dbQuery } from '../config/database';
-import { Post } from '../../shared/types';
+import { authenticateToken, requireRole, optionalAuth } from '../middleware/auth.js';
+import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler.js';
+import { query as dbQuery } from '../config/database.js';
+import { Post } from '../types.js';
 
 const router = express.Router();
 

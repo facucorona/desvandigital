@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ValidationError, validationResult } from 'express-validator';
+import { validationResult } from 'express-validator';
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -20,7 +20,7 @@ export class CustomError extends Error implements AppError {
 }
 
 // Custom error classes
-export class ValidationError extends CustomError {
+export class CustomValidationError extends CustomError {
   constructor(message: string = 'Validation failed') {
     super(message, 400);
   }
@@ -146,11 +146,11 @@ export const notFoundHandler = (req: Request, res: Response, next: NextFunction)
 };
 
 // Validation error formatter
-export const formatValidationErrors = (errors: ValidationError[]) => {
+export const formatValidationErrors = (errors: any[]) => {
   return errors.map(error => ({
-    field: error.param || error.path,
-    message: error.msg,
-    value: error.value
+    field: error.param || error.path || 'unknown',
+    message: error.msg || error.message || 'Validation error',
+    value: error.value || null
   }));
 };
 

@@ -1,6 +1,31 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session, AuthError } from '@supabase/supabase-js';
-import { supabase } from '../supabase/config';
+import { AuthError } from '@supabase/supabase-js';
+
+type User = {
+  id: string;
+  email?: string;
+  phone?: string;
+  created_at: string;
+  updated_at: string;
+  email_confirmed_at?: string;
+  phone_confirmed_at?: string;
+  last_sign_in_at?: string;
+  role?: string;
+  app_metadata: Record<string, any>;
+  user_metadata: Record<string, any>;
+  identities?: any[];
+  factors?: any[];
+};
+
+type Session = {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  expires_at?: number;
+  token_type: string;
+  user: User;
+};
+import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 
 interface AuthContextType {

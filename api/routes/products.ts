@@ -1,10 +1,10 @@
 import express from 'express';
 import { body, param, query } from 'express-validator';
 import multer from 'multer';
-import { authenticateToken, requireRole } from '../middleware/auth';
-import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler';
-import { query as dbQuery } from '../config/database';
-import { Product } from '../../shared/types';
+import { authenticateToken, requireRole } from '../middleware/auth.js';
+import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler.js';
+import { query as dbQuery } from '../config/database.js';
+import { Product } from '../types.js';
 
 const router = express.Router();
 
@@ -525,10 +525,7 @@ router.get('/seller/:sellerId',
       seller
     }));
 
-    sendPaginatedResponse(res, {
-      products,
-      seller
-    }, total, Number(page), Number(limit), 'Seller products retrieved successfully');
+    sendPaginatedResponse(res, products, total, Number(page), Number(limit), 'Seller products retrieved successfully');
   })
 );
 

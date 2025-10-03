@@ -9,7 +9,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const { login, loading } = useAuth();
+  const { signIn, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,8 +21,8 @@ const Login: React.FC = () => {
       return;
     }
     
-    const success = await login(email, password);
-    if (success) {
+    const { error: signInError } = await signIn(email, password);
+    if (!signInError) {
       toast.success('¡Bienvenido de vuelta!');
       navigate('/dashboard');
     } else {

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { Home, Plus, Save, Settings, Eye, EyeOff, RotateCcw, Maximize, Info, BookOpen, Image, FileText } from 'lucide-react';
-import { supabase } from '../supabase/config';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
 

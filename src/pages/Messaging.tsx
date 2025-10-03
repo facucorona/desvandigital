@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../hooks/useSocket';
-import { supabase } from '../supabase/config';
+import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import {
   Send,

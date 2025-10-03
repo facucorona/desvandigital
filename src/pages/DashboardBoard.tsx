@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../supabase/config';
+import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import {
   BarChart3,

@@ -1,14 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
-import { createClient } from '@supabase/supabase-js';
-import { query } from '../config/database';
-import { Message, User } from '../../shared/types';
-import { Headers } from 'node-fetch';
-
-// Polyfill Headers for Node.js environment
-if (!globalThis.Headers) {
-  globalThis.Headers = Headers as any;
-}
+import { query } from '../config/database.js';
+import { Message, User } from '../types.js';
 
 interface AuthenticatedSocket extends Socket {
   user?: User;
@@ -24,9 +17,6 @@ interface SocketData {
 const activeUsers = new Map<string, string>(); // userId -> socketId
 const userSockets = new Map<string, string>(); // socketId -> userId
 
-// Supabase client will be initialized in setupSocketHandlers
-let supabase: any;
-
 // Authenticate socket connection
 const authenticateSocket = async (socket: AuthenticatedSocket, next: (err?: Error) => void) => {
   try {
@@ -36,19 +26,19 @@ const authenticateSocket = async (socket: AuthenticatedSocket, next: (err?: Erro
       return next(new Error('Authentication token required'));
     }
 
-    // Verify Supabase JWT token
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-    
-    if (error || !user) {
-      return next(new Error('Invalid authentication token'));
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      return next(new Error('Server configuration error'));
     }
 
+    const decoded = jwt.verify(token, jwtSecret) as SocketData;
+    
     // Fetch user details from database
     const result = await query(
       `SELECT id, username, email, full_name, avatar_url, role, subscription_type, 
               created_at, updated_at
        FROM users WHERE id = $1 AND is_active = true`,
-      [user.id]
+      [decoded.userId]
     );
 
     if (result.rows.length === 0) {
@@ -58,29 +48,12 @@ const authenticateSocket = async (socket: AuthenticatedSocket, next: (err?: Erro
     socket.user = result.rows[0] as User;
     next();
   } catch (error) {
-    console.error('Socket authentication error:', error);
-    next(new Error('Authentication failed'));
+    next(new Error('Invalid authentication token'));
   }
 };
 
 // Setup Socket.IO event handlers
 export const setupSocketHandlers = (io: Server) => {
-  // Initialize Supabase client for JWT verification
-  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  console.log('🔍 Environment check:');
-  console.log('SUPABASE_URL:', supabaseUrl ? 'Set' : 'Missing');
-  console.log('SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'Set' : 'Missing');
-
-  if (!supabaseUrl || !supabaseServiceKey) {
-    console.error('❌ Supabase configuration missing. Available env vars:', Object.keys(process.env).filter(key => key.includes('SUPABASE')));
-    throw new Error('Supabase configuration missing');
-  }
-
-  supabase = createClient(supabaseUrl, supabaseServiceKey);
-  console.log('✅ Supabase client initialized successfully');
-
   // Authentication middleware
   io.use(authenticateSocket);
 

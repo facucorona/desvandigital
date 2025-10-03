@@ -1,10 +1,10 @@
 import express from 'express';
 import { body, param, query } from 'express-validator';
 import multer from 'multer';
-import { authenticateToken } from '../middleware/auth';
-import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler';
-import { query as dbQuery } from '../config/database';
-import { Message } from '../../shared/types';
+import { authenticateToken } from '../middleware/auth.js';
+import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler.js';
+import { query as dbQuery } from '../config/database.js';
+import { Message } from '../types.js';
 
 const router = express.Router();
 
@@ -195,7 +195,7 @@ router.get('/conversation/:userId',
 
     if (before) {
       whereClause += ` AND created_at < $${paramIndex}`;
-      queryParams.push(before);
+      queryParams.push(before as string);
       paramIndex++;
     }
 
@@ -267,10 +267,7 @@ router.get('/conversation/:userId',
       }
     }
 
-    sendPaginatedResponse(res, {
-      messages: messages.reverse(), // Return in chronological order
-      other_user: otherUser
-    }, total, Number(page), Number(limit), 'Messages retrieved successfully');
+    sendPaginatedResponse(res, messages.reverse(), total, Number(page), Number(limit), 'Messages retrieved successfully');
   })
 );
 
@@ -515,7 +512,7 @@ router.get('/search',
         (m.sender_id = $${paramIndex} AND m.receiver_id = $1) OR
         (m.sender_id = $1 AND m.receiver_id = $${paramIndex})
       )`;
-      queryParams.push(user_id);
+      queryParams.push(user_id as string);
       paramIndex++;
     }
 

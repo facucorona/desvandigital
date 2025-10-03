@@ -1,9 +1,9 @@
 import express from 'express';
 import { body, param, query } from 'express-validator';
-import { authenticateToken, requireRole, requireSubscription } from '../middleware/auth';
-import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler';
-import { query as dbQuery } from '../config/database';
-import { StudyRoute } from '../../shared/types';
+import { authenticateToken, requireRole } from '../middleware/auth.js';
+import { validateRequest, asyncHandler, sendSuccess, sendPaginatedResponse } from '../middleware/errorHandler.js';
+import { query as dbQuery } from '../config/database.js';
+import { StudyRoute } from '../types.js';
 
 const router = express.Router();
 
@@ -222,7 +222,7 @@ router.get('/:id',
 // Create study route (instructors only)
 router.post('/',
   authenticateToken,
-  requireRole(['instructor', 'admin']),
+  requireRole(['admin']),
   [
     body('title')
       .isLength({ min: 5, max: 200 })
